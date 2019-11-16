@@ -3,6 +3,8 @@ package com.example.yhaa18
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yhaa18.AnimationScreen.Companion.FILE_NUM
@@ -19,11 +21,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initAll()
+        //initAll()
+        selectConversation()
         recyclerView.layoutManager = layoutManger
         recyclerView.adapter = adapter
         adapter!!.notifyDataSetChanged()
    }
+
 
     private fun initAll() {
         convList = arrayListOf()
@@ -70,11 +74,32 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        val intent=Intent(this,AnimationScreen1::class.java)
+        val intent=Intent(this,AnimationScreen::class.java)
         intent.putExtra(FILE_NUM, CURRENT_NUM)
         startActivity(intent)
     }
+
+    private fun selectConversation() {
+        val  CURRENT_NUM = 20
+        val intent=Intent(this,AnimationScreen::class.java)
+        intent.putExtra(FILE_NUM, CURRENT_NUM)
+        startActivity(intent)
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*

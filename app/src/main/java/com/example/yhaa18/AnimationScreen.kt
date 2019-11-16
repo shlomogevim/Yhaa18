@@ -13,11 +13,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.yhaa18.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_animation_screen.*
-import kotlinx.android.synthetic.main.helper_view_layout.*
 import kotlinx.android.synthetic.main.helper_view_layout.action_ListView
 import kotlinx.android.synthetic.main.helper_view_layout.colorNam_ET
 import kotlinx.android.synthetic.main.helper_view_layout.displayAgainBtn
@@ -35,7 +33,6 @@ import kotlinx.android.synthetic.main.helper_view_layout.textRevBtn
 import kotlinx.android.synthetic.main.helper_view_layout.ttPara_listView
 import kotlinx.android.synthetic.main.helper_view_layout.tvAnimatinKind
 import kotlinx.android.synthetic.main.helper_view_layout.tvPage
-import kotlinx.android.synthetic.main.helpre_show_layout.*
 
 
 class AnimationScreen : AppCompatActivity(), View.OnClickListener {
@@ -86,14 +83,12 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.show_layout)
 
-       /* if (SHOW_POSITION) {
-            setContentView(R.layout.show_layout)
-        }else{
-            setContentView(R.layout.activity_animation_screen)
-        }
-*/
+         if (SHOW_POSITION) {
+             setContentView(R.layout.show_layout)
+         }else{
+             setContentView(R.layout.activity_animation_screen)
+         }
 
 
 
@@ -112,6 +107,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         initButton()
         lastTalker = Talker()
         tranferTalkItem(0)
+
         backGroundConfigration()
 
 
@@ -122,8 +118,8 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     fun backGroundConfigration(){
 
         val animationDrawable=imageView.background as? AnimationDrawable
-       /* animationDrawable?.setEnterFadeDuration(2000)
-        animationDrawable?.setExitFadeDuration(4000)*/
+         animationDrawable?.setEnterFadeDuration(2000)
+         animationDrawable?.setExitFadeDuration(4000)
         animationDrawable?.start()
 
     }
@@ -830,6 +826,9 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
            operateList = gson.fromJson(jsonString, type)
        }
    }*/
+
+
+
 
 
 
