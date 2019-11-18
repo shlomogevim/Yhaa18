@@ -11,9 +11,7 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
-
+import java.io.*
 
 
 class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
@@ -30,9 +28,72 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
         editor = myPref.edit()
     }
 
-/*
-    var pref = con.getSharedPreferences(FILE_NAME, Context.CONTEXT_IGNORE_SECURITY)
-*/
+    private val filepath = "MyFileStorage"
+    internal var myExternalFile: File? = null
+
+
+    fun saveDataToExternalStorage(talkingList: ArrayList<Talker>) {
+        try {
+            myExternalFile = File(context.getExternalFilesDir(filepath), TALKLIST)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        val gson = Gson()
+        val jsonString = gson.toJson(talkingList)
+
+
+        try {
+            val fileOutPutStream = FileOutputStream(myExternalFile)
+            fileOutPutStream.write(jsonString.toByteArray())
+            fileOutPutStream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        // Toast.makeText(applicationContext, "data save", Toast.LENGTH_SHORT).show()
+    }
+
+    fun getTalkingListFromExternalStorage(ind: Int): ArrayList<Talker> {
+        var talkList1: ArrayList<Talker> = arrayListOf()
+        var jsonString=""
+        val gson = Gson()
+       // myExternalFile = File(context.getExternalFilesDir(filepath), TALKLIST)
+
+               //storage/emulated/0/Android/data/com.example.yhaa18/files/MyFileStorage/talklist20
+        val st="/storage/emulated/0/Android/data/com.example.yhaa17/files/MyFileStorage"
+        val st1=st+"/talklist20"
+        myExternalFile = File(st, TALKLIST)
+
+
+        if (TALKLIST != null) {
+            var fileInputStream= FileInputStream(myExternalFile)
+            var inputStreamReader: InputStreamReader = InputStreamReader(fileInputStream)
+            val bufferedReader: BufferedReader = BufferedReader(inputStreamReader)
+            val stringBuilder: StringBuilder = StringBuilder()
+            var text: String? = null
+
+            while ({ text = bufferedReader.readLine(); text }() != null) {
+                stringBuilder.append(text)
+            }
+            jsonString=stringBuilder.toString()
+
+            //      while ({ jsonString = bufferedReader.readLine(); text }() != null)
+
+            if (ind == 0 || jsonString == null) {
+                talkList1 = createTalkListFromTheStart()
+                saveData(talkList1)
+
+            } else {
+                val type = object : TypeToken<ArrayList<Talker>>() {}.type
+                talkList1 = gson.fromJson(jsonString, type)
+            }
+
+ //           fileInputStream.close()
+        }
+
+        return talkList1
+
+    }
 
 
     fun getTalkingList(ind:Int): ArrayList<Talker> {

@@ -95,8 +95,9 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         currentFileNum = intent.getIntExtra(FILE_NUM, 0)
         sharData = ShareData(this, currentFileNum)
         activatApp = ActivateApp(this)
-        talkList = sharData.getTalkingList(1)
-        // textTalkList = sharData.createTalkListFromTheStart()
+
+       // talkList = sharData.getTalkingList(1)
+        talkList = sharData.getTalkingListFromExternalStorage(1)
 
         initValues()
         styleListView()   //list view in the left side
@@ -697,7 +698,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         editor.putInt(CURRENT_SPEAKER, counterStep)
         editor.commit()
         updateTitleTalkerSituation()
-        sharData.saveData(talkList)
+        sharData.saveDataToExternalStorage(talkList)
         Toast.makeText(this, "It's save Mr", Toast.LENGTH_SHORT).show()
     }
 
