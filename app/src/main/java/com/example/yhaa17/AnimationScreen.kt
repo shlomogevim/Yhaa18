@@ -1,4 +1,4 @@
-package com.example.yhaa18
+package com.example.yhaa17
 
 import android.app.Activity
 import android.content.Context
@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.helper_view_layout.tvPage
 class AnimationScreen : AppCompatActivity(), View.OnClickListener {
 
 
-    val SHOW_POSITION = false // *************
+    val SHOW_POSITION = true // *************
 
     companion object {
         const val FILE_NUM = "file_num"
@@ -89,8 +89,6 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
          }else{
              setContentView(R.layout.activity_animation_screen)
          }
-
-
 
         currentFileNum = intent.getIntExtra(FILE_NUM, 0)
         sharData = ShareData(this, currentFileNum)

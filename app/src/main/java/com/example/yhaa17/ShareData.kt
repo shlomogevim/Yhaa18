@@ -1,4 +1,4 @@
-package com.example.yhaa18
+package com.example.yhaa17
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,11 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.preference.PreferenceManager
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import java.io.*
 
 
@@ -57,15 +52,8 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
         var talkList1: ArrayList<Talker> = arrayListOf()
         var jsonString=""
         val gson = Gson()
-       // myExternalFile = File(context.getExternalFilesDir(filepath), TALKLIST)
-
-               //storage/emulated/0/Android/data/com.example.yhaa18/files/MyFileStorage/talklist20
-        val st="/storage/emulated/0/Android/data/com.example.yhaa17/files/MyFileStorage"
-        val st1=st+"/talklist20"
-        myExternalFile = File(st, TALKLIST)
-
-
-        if (TALKLIST != null) {
+        myExternalFile = File(context.getExternalFilesDir(filepath), TALKLIST)
+       if (TALKLIST != null) {
             var fileInputStream= FileInputStream(myExternalFile)
             var inputStreamReader: InputStreamReader = InputStreamReader(fileInputStream)
             val bufferedReader: BufferedReader = BufferedReader(inputStreamReader)
@@ -77,7 +65,6 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
             }
             jsonString=stringBuilder.toString()
 
-            //      while ({ jsonString = bufferedReader.readLine(); text }() != null)
 
             if (ind == 0 || jsonString == null) {
                 talkList1 = createTalkListFromTheStart()
@@ -90,6 +77,7 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
 
  //           fileInputStream.close()
         }
+
 
         return talkList1
 

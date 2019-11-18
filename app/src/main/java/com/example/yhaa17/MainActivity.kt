@@ -1,13 +1,11 @@
-package com.example.yhaa18
+package com.example.yhaa17
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.yhaa18.AnimationScreen.Companion.FILE_NUM
+import com.example.yhaa17.AnimationScreen.Companion.FILE_NUM
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

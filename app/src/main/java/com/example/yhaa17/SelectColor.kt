@@ -1,4 +1,4 @@
-package com.example.yhaa18
+package com.example.yhaa17
 
 import android.app.Activity
 import android.content.Intent
@@ -8,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.SeekBar
-import com.example.yhaa18.R
 import kotlinx.android.synthetic.main.activity_select_color.*
 import kotlinx.android.synthetic.main.picker_layout.*
 

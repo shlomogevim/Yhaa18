@@ -10,7 +10,7 @@ android {
         enabled=true
     }
     defaultConfig {
-        applicationId "com.example.yhaa18"
+        applicationId "com.example.yhaa17"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1

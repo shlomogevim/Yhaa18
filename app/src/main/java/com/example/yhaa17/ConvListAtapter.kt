@@ -1,12 +1,10 @@
-package com.example.yhaa18
+package com.example.yhaa17
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.yhaa18.R
 import kotlinx.android.synthetic.main.item_row_layout.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 typealias CurrentConv=(Conversation)->Unit
