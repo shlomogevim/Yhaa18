@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         adapter!!.notifyDataSetChanged()
 
+
+
         operateConverastion(Conversation(1,"stam","stam"))
 
     }

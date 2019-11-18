@@ -18,6 +18,7 @@ class AnimationAction(val context: Context, val view: View) {
 
 
     fun excuteTalker(talker: Talker) {
+
         // initAllTextview(500)
         if (talker.whoSpeake == "man") {
             configManTextView(talker)
@@ -43,11 +44,12 @@ class AnimationAction(val context: Context, val view: View) {
     }
 
     private fun letsMove(
-        talker: Talker,
+         talker: Talker,
         listOfTextview: ArrayList<TextView?>,
         listOfTextviewM: ArrayList<TextView?>,
         dur: Long
     ) {
+        operateBackgroundColor(talker)
 
         when (talker.animNum) {
             10 -> Utile.move_swing(10, talker, listOfTextview)
@@ -96,6 +98,14 @@ class AnimationAction(val context: Context, val view: View) {
 
         }
 
+    }
+
+    private fun operateBackgroundColor(talker: Talker) {
+        if (talker.whoSpeake=="man"){
+            var layout=R.layout.man_layout
+
+
+        }
     }
 
     private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {

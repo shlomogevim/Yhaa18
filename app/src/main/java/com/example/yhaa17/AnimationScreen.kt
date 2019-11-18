@@ -84,6 +84,8 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
          if (SHOW_POSITION) {
              setContentView(R.layout.show_layout)
          }else{
