@@ -1,4 +1,4 @@
-package com.example.yhaa17
+package com.example.yhaa18
 
 import android.app.Activity
 import android.content.Context
@@ -7,12 +7,14 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_animation_screen.*
@@ -35,16 +37,16 @@ import kotlinx.android.synthetic.main.helper_view_layout.tvAnimatinKind
 import kotlinx.android.synthetic.main.helper_view_layout.tvPage
 
 
-class AnimationScreen : AppCompatActivity(), View.OnClickListener {
+class AnimationScreen() : AppCompatActivity(), View.OnClickListener {
 
 
-    val SHOW_POSITION = true // *************
+    val SHOW_POSITION = false // *************
 
     companion object {
         const val FILE_NUM = "file_num"
     }
 
-    lateinit var talkList: ArrayList<Talker>
+     var talkList=ArrayList<Talker>()
     lateinit var textTalkList: ArrayList<Talker>
     lateinit var spicalTalkList: ArrayList<Talker>
 
@@ -84,20 +86,23 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
          if (SHOW_POSITION) {
              setContentView(R.layout.show_layout)
          }else{
              setContentView(R.layout.activity_animation_screen)
          }
 
+
+
         currentFileNum = intent.getIntExtra(FILE_NUM, 0)
+        createTalkList()
+
+
         sharData = ShareData(this, currentFileNum)
         activatApp = ActivateApp(this)
 
-       // talkList = sharData.getTalkingList(1)
-        talkList = sharData.getTalkingListFromExternalStorage(1)
+        // retriveDataFromFirebase()
+        //talkList = sharData.getTalkingList(1)
 
         initValues()
         styleListView()   //list view in the left side
@@ -111,18 +116,22 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
 
         backGroundConfigration()
 
-
-
         moveTheAnimation()     // Let's play
     }
+    private fun createTalkList() {
+        var jsonString=intent.getStringExtra("jsonString")
+        val gson = Gson()
+       val type = object : TypeToken<ArrayList<Talker>>() {}.type
+       talkList = gson.fromJson(jsonString, type)
+       Log.d("clima","${talkList[17].taking}")
+
+   }
 
     fun backGroundConfigration(){
-
         val animationDrawable=imageView.background as? AnimationDrawable
          animationDrawable?.setEnterFadeDuration(2000)
          animationDrawable?.setExitFadeDuration(4000)
         animationDrawable?.start()
-
     }
 
     private fun tranferTalkItem(ind: Int) {
@@ -133,8 +142,6 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         } else {
             talkList[counterStep] = lastTalker.copy()
         }
-
-
     }
 
     private fun moveTheAnimation() {

@@ -1,4 +1,4 @@
-package com.example.yhaa17
+package com.example.yhaa18
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,6 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.preference.PreferenceManager
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.util.Log
+import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.*
 
 
@@ -52,8 +60,15 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
         var talkList1: ArrayList<Talker> = arrayListOf()
         var jsonString=""
         val gson = Gson()
-        myExternalFile = File(context.getExternalFilesDir(filepath), TALKLIST)
-       if (TALKLIST != null) {
+       // myExternalFile = File(context.getExternalFilesDir(filepath), TALKLIST)
+
+               //storage/emulated/0/Android/data/com.example.yhaa18/files/MyFileStorage/talklist20
+        val st="/storage/emulated/0/Android/data/com.example.yhaa17/files/MyFileStorage"
+        val st1=st+"/talklist20"
+        myExternalFile = File(st, TALKLIST)
+
+
+        if (TALKLIST != null) {
             var fileInputStream= FileInputStream(myExternalFile)
             var inputStreamReader: InputStreamReader = InputStreamReader(fileInputStream)
             val bufferedReader: BufferedReader = BufferedReader(inputStreamReader)
@@ -65,6 +80,7 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
             }
             jsonString=stringBuilder.toString()
 
+            //      while ({ jsonString = bufferedReader.readLine(); text }() != null)
 
             if (ind == 0 || jsonString == null) {
                 talkList1 = createTalkListFromTheStart()
@@ -78,28 +94,85 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
  //           fileInputStream.close()
         }
 
-
         return talkList1
 
     }
 
+    private fun createTalkArray(jsonString: String?) {
+        //  Log.d("clima",jsonString)
+        talkList= arrayListOf()
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<Talker>>() {}.type
+        talkList = gson.fromJson(jsonString, type)
+        Log.d("clima","${talkList[19].taking}")
 
+    }
+    private fun retriveDataFromFirebase():String {
+        var jsonString=""
+
+        var db = FirebaseFirestore.getInstance()
+        Log.d("clima","db="+db.toString())
+        db.collection("talker1").document("3").get().addOnCompleteListener { task ->
+
+            Log.d("clima","inside")
+            if (task.result?.exists()!!) {
+                jsonString = task.result!!.getString("main").toString()
+
+                createTalkArray(jsonString)
+
+                Toast.makeText(this, "Find", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Not Find because ${task.exception?.message} ",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        return jsonString
+    }
+
+
+/*
     fun getTalkingList(ind:Int): ArrayList<Talker> {
-        var talkList1: ArrayList<Talker>
+        talkList= arrayListOf()
+
+        Log.d("clima","one")
+        val jsonString=retriveDataFromFirebase()
+
+        *//*var talkList1: ArrayList<Talker>
         val gson = Gson()
        // val jsonString = myPref.getString(TALKLIST, null)
-        val jsonString = myPref.getString(TALKLIST, null)
+        val jsonString = myPref.getString(TALKLIST, null)*//*
 
         if (ind==0 || jsonString == null) {
-            talkList1=createTalkListFromTheStart()
-            saveData(talkList1)
-
+            talkList=createTalkListFromTheStart()
+            saveData(talkList)
         } else {
-            val type = object : TypeToken<ArrayList<Talker>>() {}.type
-            talkList1 = gson.fromJson(jsonString, type)
+            createTalkArray(jsonString)
+
+            *//*val type = object : TypeToken<ArrayList<Talker>>() {}.type
+            talkList1 = gson.fromJson(jsonString, type)*//*
         }
-        return talkList1
+        return talkList
+    }*/
+fun getTalkingList(ind:Int): ArrayList<Talker> {
+    var talkList1: ArrayList<Talker>
+    val gson = Gson()
+    // val jsonString = myPref.getString(TALKLIST, null)
+    val jsonString = myPref.getString(TALKLIST, null)
+
+    if (ind==0 || jsonString == null) {
+        talkList1=createTalkListFromTheStart()
+        saveData(talkList1)
+
+    } else {
+        val type = object : TypeToken<ArrayList<Talker>>() {}.type
+        talkList1 = gson.fromJson(jsonString, type)
     }
+    //   talkList1=improveTalkList(talkList1)
+    return talkList1
+}
     fun saveData(talkingList:ArrayList<Talker>) {
         val gson = Gson()
         val jsonString = gson.toJson(talkingList)

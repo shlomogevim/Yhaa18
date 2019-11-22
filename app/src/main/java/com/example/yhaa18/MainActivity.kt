@@ -1,12 +1,18 @@
-package com.example.yhaa17
+package com.example.yhaa18
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.yhaa17.AnimationScreen.Companion.FILE_NUM
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.yhaa18.AnimationScreen.Companion.FILE_NUM
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,19 +22,70 @@ class MainActivity : AppCompatActivity() {
     private var convList: ArrayList<Conversation>? = null
     private var adapter: ConvListAtapter? = null
     private var layoutManger: RecyclerView.LayoutManager? = null
+    var talkList=ArrayList<Talker>()
+    var jsonString=""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        initAll()
-        recyclerView.layoutManager = layoutManger
-        recyclerView.adapter = adapter
-        adapter!!.notifyDataSetChanged()
+      //  setContentView(R.layout.activity_main)
+
+        retriveDataFromFirebase()
+        Handler().postDelayed(
+            {
+                createJustFirstTalk()
+            },5000
+        )
+
+        /*     initAll()
+                  recyclerView.layoutManager = layoutManger
+                 recyclerView.adapter = adapter
+                 adapter!!.notifyDataSetChanged()
+
+                 operateConverastion(Conversation(1,"stam","stam")) */
+    }
 
 
+    private fun retriveDataFromFirebase() {
+        talkList= arrayListOf()
 
-        operateConverastion(Conversation(1,"stam","stam"))
+
+        var db = FirebaseFirestore.getInstance()
+       // Log.d("clima","db="+db.toString())
+        db.collection("talker1").document("3").get().addOnCompleteListener { task ->
+
+           // Log.d("clima","inside")
+            if (task.result?.exists()!!) {
+                 jsonString = task.result!!.getString("main")!!
+
+             // createTalkArray(jsonString)
+
+            } else {
+                Toast.makeText(
+                    this,
+                    "Not Find because ${task.exception?.message} ",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun createTalkArray(jsonString: String?) {
+        //  Log.d("clima",jsonString)
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<Talker>>() {}.type
+        talkList = gson.fromJson(jsonString, type)
+        Log.d("clima","${talkList[17].taking}")
+
+    }
+
+
+    private fun createJustFirstTalk() {
+        val intent = Intent(this, AnimationScreen::class.java)
+        intent.putExtra(FILE_NUM, 20)
+        intent.putExtra("jsonString",jsonString)
+       // Log.d("clima",jsonString)
+        startActivity(intent)
 
     }
 

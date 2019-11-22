@@ -3,11 +3,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
-    dataBinding{
-        enabled=true
+    dataBinding {
+        enabled = true
     }
     defaultConfig {
         applicationId "com.example.yhaa17"
@@ -37,6 +38,7 @@ dependencies {
     //https://github.com/florent37/ViewAnimator
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    implementation 'com.google.firebase:firebase-firestore:17.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

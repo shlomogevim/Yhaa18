@@ -1,4 +1,4 @@
-package com.example.yhaa17
+package com.example.yhaa18
 
 import android.content.Context
 import android.graphics.Color
@@ -51,6 +51,7 @@ class AnimationAction(val context: Context, val view: View) {
     ) {
         operateBackgroundColor(talker)
 
+
         when (talker.animNum) {
             10 -> Utile.move_swing(10, talker, listOfTextview)
             11 -> Utile.move_swing(11, talker, listOfTextview)
@@ -102,7 +103,7 @@ class AnimationAction(val context: Context, val view: View) {
 
     private fun operateBackgroundColor(talker: Talker) {
         if (talker.whoSpeake=="man"){
-            var layout=R.layout.man_layout
+            var layout= R.layout.man_layout
 
 
         }
