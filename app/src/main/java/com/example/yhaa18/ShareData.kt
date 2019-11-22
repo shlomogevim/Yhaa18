@@ -11,6 +11,9 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.util.Log
+import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.*
 
 
@@ -95,23 +98,81 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
 
     }
 
+    private fun createTalkArray(jsonString: String?) {
+        //  Log.d("clima",jsonString)
+        talkList= arrayListOf()
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<Talker>>() {}.type
+        talkList = gson.fromJson(jsonString, type)
+        Log.d("clima","${talkList[19].taking}")
 
+    }
+    private fun retriveDataFromFirebase():String {
+        var jsonString=""
+
+        var db = FirebaseFirestore.getInstance()
+        Log.d("clima","db="+db.toString())
+        db.collection("talker1").document("3").get().addOnCompleteListener { task ->
+
+            Log.d("clima","inside")
+            if (task.result?.exists()!!) {
+                jsonString = task.result!!.getString("main").toString()
+
+                createTalkArray(jsonString)
+
+                Toast.makeText(this, "Find", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Not Find because ${task.exception?.message} ",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        return jsonString
+    }
+
+
+/*
     fun getTalkingList(ind:Int): ArrayList<Talker> {
-        var talkList1: ArrayList<Talker>
+        talkList= arrayListOf()
+
+        Log.d("clima","one")
+        val jsonString=retriveDataFromFirebase()
+
+        *//*var talkList1: ArrayList<Talker>
         val gson = Gson()
        // val jsonString = myPref.getString(TALKLIST, null)
-        val jsonString = myPref.getString(TALKLIST, null)
+        val jsonString = myPref.getString(TALKLIST, null)*//*
 
         if (ind==0 || jsonString == null) {
-            talkList1=createTalkListFromTheStart()
-            saveData(talkList1)
-
+            talkList=createTalkListFromTheStart()
+            saveData(talkList)
         } else {
-            val type = object : TypeToken<ArrayList<Talker>>() {}.type
-            talkList1 = gson.fromJson(jsonString, type)
+            createTalkArray(jsonString)
+
+            *//*val type = object : TypeToken<ArrayList<Talker>>() {}.type
+            talkList1 = gson.fromJson(jsonString, type)*//*
         }
-        return talkList1
+        return talkList
+    }*/
+fun getTalkingList(ind:Int): ArrayList<Talker> {
+    var talkList1: ArrayList<Talker>
+    val gson = Gson()
+    // val jsonString = myPref.getString(TALKLIST, null)
+    val jsonString = myPref.getString(TALKLIST, null)
+
+    if (ind==0 || jsonString == null) {
+        talkList1=createTalkListFromTheStart()
+        saveData(talkList1)
+
+    } else {
+        val type = object : TypeToken<ArrayList<Talker>>() {}.type
+        talkList1 = gson.fromJson(jsonString, type)
     }
+    //   talkList1=improveTalkList(talkList1)
+    return talkList1
+}
     fun saveData(talkingList:ArrayList<Talker>) {
         val gson = Gson()
         val jsonString = gson.toJson(talkingList)

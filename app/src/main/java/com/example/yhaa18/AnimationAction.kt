@@ -49,6 +49,7 @@ class AnimationAction(val context: Context, val view: View) {
         dur: Long
     ) {
 
+
         when (talker.animNum) {
             10 -> Utile.move_swing(10, talker, listOfTextview)
             11 -> Utile.move_swing(11, talker, listOfTextview)
